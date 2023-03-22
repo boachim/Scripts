@@ -65,13 +65,13 @@ Write-Verbose ('START TIME: ' + $ScriptStart)
 $graphRequest = 'https://graph.microsoft.com/v1.0/users/'
 
 $pageCount = 999
+$throttleLimit = 5
 $cacheFilePath = './script.cache'
 $currentCount = 0
 $resume = $false
 $percentComplete = 0
 
 $licenseReportPath = '.\'
-#$licenseReportPath = Get-Location
 $date = Get-Date -Format 'yyyyMMdd'
 $productNames = @{}
 $planNames = @{}
@@ -166,7 +166,7 @@ do {
             $userLicenseSummary += $itemInfo
         }    
         $userLicenseSummary | Export-Csv -Path $userLicenseSummaryReportPath -Append
-    } -ThrottleLimit 3 -AsJob
+    } -ThrottleLimit $throttleLimit -AsJob
 
     $job | Receive-Job -Wait
 
